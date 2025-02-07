@@ -4,17 +4,18 @@ function isLeapYear(year) {
 
 function calculateAge() {
     const dobInput = document.getElementById('dob').value;
+    const resultElement = document.getElementById('result');
     
     if (!dobInput) {
-        document.getElementById('result').textContent = "Please enter a valid date.";
+        resultElement.innerHTML = "Please enter a valid date.";
         return;
     }
 
-    const dob = new Date(dobInput + "T00:00:00Z"); // Forces UTC
+    const dob = new Date(dobInput + "T00:00:00Z"); // Forces UTC to avoid time zone issues
     const today = new Date(new Date().toISOString().split('T')[0]); // Removes time component
 
     if (dob > today) {
-        document.getElementById('result').textContent = "Future dates are not allowed.";
+        resultElement.innerHTML = "Future dates are not allowed.";
         return;
     }
 
@@ -22,7 +23,7 @@ function calculateAge() {
     let months = today.getMonth() - dob.getMonth();
     let days = today.getDate() - dob.getDate();
 
-    // Handle leap year birthdays
+    // Handle leap year birthdays (Feb 29)
     if (dob.getMonth() === 1 && dob.getDate() === 29 && !isLeapYear(today.getFullYear())) {
         days += 1;
     }
@@ -41,6 +42,6 @@ function calculateAge() {
         months += 12;
     }
 
-    document.getElementById('result').textContent = 
-        `You are ${years} years, ${months} months, and ${days} days old.`;
+    resultElement.innerHTML = 
+        `You are <span class="bold-text">${years} years ${months} months</span> old`;
 }
